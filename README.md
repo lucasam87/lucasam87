@@ -1,6 +1,6 @@
 <!-- ========================= HEADER ========================= -->
 <h1 align="center">
-  <img src="https://readme-typing-svg.herokuapp.com/?lines=👋+Olá,+eu+sou+Lucas+Moreira!;💻+Desenvolvedor+Full+Stack;🚀+Apaixonado+por+tecnologia+e+inovação!&center=true&size=25">
+  <img src="https://readme-typing-svg.herokuapp.com/?lines=👋+Olá,+eu+sou+Lucas+Moreira!;💻+Desenvolvedor+Backend;🚀+Apaixonado+por+tecnologia+e+inovação!&center=true&size=25">
 </h1>
 
 <p align="center">
