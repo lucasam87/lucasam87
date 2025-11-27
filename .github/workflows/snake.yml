@@ -1,0 +1,33 @@
+name: Generate Snake Animation
+
+on:
+  schedule:
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Generate Snake
+        uses: Platane/snk@v3
+        with:
+          github_user_name: "lucasam87"
+          outputs: |
+            dist/github-contribution-grid-snake.svg
+
+      - name: Push Snake Animation
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Update Snake Animation"
+          commit_user_name: github-actions
+          commit_user_email: actions@github.com
+          commit_author: github-actions <actions@github.com>
+          file_pattern: dist/**
+
