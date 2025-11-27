@@ -2,27 +2,50 @@ name: Generate Snake
 
 on:
   schedule:
-    - cron: "0 */12 * * *"
+    - cron: "0 */12 * * *"   # a cada 12h
+  workflow_dispatch:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  build:
+  generate:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
     steps:
-      - uses: actions/checkout@v2
-
-      - uses: Platane/snk@master
+      - name: Checkout main
+        uses: actions/checkout@v3
         with:
-          github_user_name: lucasam87
-          outputs: dist/snake.svg
+          fetch-depth: 0
 
-      - name: Push Snake
-        uses: EndBug/add-and-commit@v9
+      - name: Generate snake SVG
+        uses: Platane/snk@v3
         with:
-          branch: output
-          message: "update snake"
-          add: "dist/snake.svg"
+          github_user_name: "lucasam87"
+          outputs: |
+            dist/snake.svg
+
+      - name: List dist files (debug)
+        run: |
+          ls -R
+          ls dist || echo "dist not found"
+
+      - name: Push to output branch
+        run: |
+          # Clona a branch output (ou cria se não existir)
+          git fetch origin
+          if git branch -r | grep "origin/output"; then
+            git checkout output
+          else
+            git checkout --orphan output
+            git rm -rf . || true
+          fi
+
+          # Copia o arquivo gerado da pasta dist da main para a branch output
+          mkdir -p dist
+          cp -f dist/snake.svg dist/snake.svg 2>/dev/null || true
+
+          git add dist/snake.svg
+          git commit -m "Update snake animation" || echo "Nada para commitar"
+          git push origin output || echo "Falha ao enviar para output (ver logs)"
